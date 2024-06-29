@@ -1,6 +1,6 @@
 import Foundation
 
-struct TodoItem {
+struct TodoItem: Identifiable {
     
     let id: String
     let text: String
@@ -9,6 +9,7 @@ struct TodoItem {
     let isDone: Bool
     let creationDate: Date
     let modifiedDate: Date?
+    let color: Color
     
     init(
         id: String = UUID().uuidString,
@@ -17,7 +18,8 @@ struct TodoItem {
         deadline: Date? = nil,
         isDone: Bool = false,
         creationDate: Date = .now,
-        modifiedDate: Date? = nil
+        modifiedDate: Date? = nil,
+        color: Color = Color.default
     ) {
         self.id = id
         self.text = text
@@ -26,10 +28,46 @@ struct TodoItem {
         self.isDone = isDone
         self.creationDate = creationDate
         self.modifiedDate = modifiedDate
+        self.color = color
     }
     
-    enum Importance: String {
+    func switchIsDone() -> TodoItem {
+        TodoItem(
+            id: id,
+            text: text,
+            importance: importance,
+            deadline: deadline,
+            isDone: !isDone,
+            creationDate: creationDate,
+            modifiedDate: .now,
+            color: color
+        )
+    }
+    
+    enum Importance: String, CaseIterable, Identifiable {
+        var value: Int {
+            switch self {
+            case .unimportant:
+                return 0
+            case .ordinary:
+                return 1
+            case .important:
+                return 2
+            }
+        }
+        
+        var id: String {
+            rawValue
+        }
+        
         case unimportant, ordinary, important
+    }
+    
+    struct Color: Equatable {
+        let hex: String
+        var opacity: Double
+        
+        static let `default` = Color(hex: "#FEFEFE", opacity: 1.0)
     }
     
 }
@@ -40,9 +78,10 @@ extension TodoItem {
         var object: [String: Any] = [
             "id": id,
             "text": text,
-            "importance": importance,
             "isDone": isDone,
             "creationDate": creationDate.ISO8601Format(),
+            "colorHex": color.hex,
+            "colorOpacity": color.opacity
         ]
         
         if importance != .ordinary {
@@ -70,7 +109,9 @@ extension TodoItem {
               let text = jsonDict["text"] as? String,
               let isDone = jsonDict["isDone"] as? Bool,
               let creationDateString = jsonDict["creationDate"] as? String,
-              let creationDate = formatter.date(from: creationDateString)
+              let creationDate = formatter.date(from: creationDateString),
+              let colorHex = jsonDict["colorHex"] as? String,
+              let colorOpacity = jsonDict["colorOpacity"] as? Double
         else { return nil }
     
         let importance = (jsonDict["importance"] as? String).flatMap { Importance(rawValue: $0) } ?? .ordinary
@@ -84,7 +125,8 @@ extension TodoItem {
             deadline: deadline,
             isDone: isDone,
             creationDate: creationDate,
-            modifiedDate: modifiedDate
+            modifiedDate: modifiedDate,
+            color: Color(hex: colorHex, opacity: colorOpacity)
         )
     }
     
