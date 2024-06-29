@@ -49,7 +49,9 @@ final class TodoItemTests: XCTestCase {
             "deadline": now.ISO8601Format(),
             "isDone": true,
             "creationDate": now.ISO8601Format(),
-            "modifiedDate": now.ISO8601Format()
+            "modifiedDate": now.ISO8601Format(),
+            "colorHex": "#FEFEFE",
+            "colorOpacity": 1.0
         ] as [String : Any]
         
         let todo = try XCTUnwrap(TodoItem.parse(json: json))
@@ -60,6 +62,7 @@ final class TodoItemTests: XCTestCase {
         XCTAssertEqual(todo.deadline?.ISO8601Format(), now.ISO8601Format())
         XCTAssertEqual(todo.creationDate.ISO8601Format(), now.ISO8601Format())
         XCTAssertEqual(todo.modifiedDate?.ISO8601Format(), now.ISO8601Format())
+        XCTAssertEqual(todo.color, .init(hex: "#FEFEFE", opacity: 1.0))
     }
 
     func testParseWrongCreationDate() {
