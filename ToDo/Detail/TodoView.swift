@@ -4,6 +4,8 @@ struct TodoView: View {
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
 
     @EnvironmentObject var store: TodoStore
     
@@ -38,52 +40,77 @@ struct TodoView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            
-            // Portait
-            if verticalSizeClass == .regular {
-                List {
-                    textFieldSection
-                    choicesSection
-                    deleteSection
+        
+        // iPad
+        if horizontalSizeClass == .regular && verticalSizeClass == .regular {
+            HStack {
+                textFieldSection
+                if !isTextFieldFocused {
+                    List {
+                        choicesSection
+                        deleteSection
+                    }
                 }
+            }
+            .navigationTitle("Дело")
+            .navigationBarTitleDisplayMode(.inline)
+            .scrollDismissesKeyboard(.interactively)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    cancelButtonView
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    doneButtonView
+                }
+            }
+        } else {
+            NavigationStack {
                 
-                .navigationTitle("Дело")
-                .navigationBarTitleDisplayMode(.inline)
-                .scrollDismissesKeyboard(.interactively)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        cancelButtonView
+                // Portait iPhone
+                if verticalSizeClass == .regular {
+                    List {
+                        textFieldSection
+                        choicesSection
+                        deleteSection
                     }
-                    ToolbarItem(placement: .confirmationAction) {
-                        doneButtonView
-                    }
-                }
-            } else {
-                HStack {
-                    textFieldSection
-                    if !isTextFieldFocused {
-                        List {
-                            choicesSection
-                            deleteSection
+                    
+                    .navigationTitle("Дело")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .scrollDismissesKeyboard(.interactively)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            cancelButtonView
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            doneButtonView
                         }
                     }
-                }
-                .navigationTitle("Дело")
-                .navigationBarTitleDisplayMode(.inline)
-                .scrollDismissesKeyboard(.interactively)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        cancelButtonView
+                } else {
+                    HStack {
+                        textFieldSection
+                        if !isTextFieldFocused {
+                            List {
+                                choicesSection
+                                deleteSection
+                            }
+                        }
                     }
-                    ToolbarItem(placement: .confirmationAction) {
-                        doneButtonView
+                    .navigationTitle("Дело")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .scrollDismissesKeyboard(.interactively)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            cancelButtonView
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            doneButtonView
+                        }
                     }
+                    
                 }
-                
             }
-            
         }
+            
     }
     
     var textFieldSection: some View {

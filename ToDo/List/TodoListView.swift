@@ -2,31 +2,61 @@ import SwiftUI
 
 struct TodoListView: View {
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+
+    
     @EnvironmentObject var store: TodoStore
     @Binding var todos: [TodoItem]
     @State private var tappedTodo: TodoItem?
     @State var isCreationPresented: Bool = false
     
     var body: some View {
-        NavigationStack {
-            List {
-                Section {
-                    ForEach($todos) { $todo in
-                        tapCardView(for: $todo)
+        
+        // iPad
+        if horizontalSizeClass == .regular && verticalSizeClass == .regular {
+            NavigationSplitView {
+                List {
+                    Section {
+                        ForEach($todos) { $todo in
+                            NavigationLink {
+                                TodoView(todo: todo)
+                            } label: {
+                                cardView(for: $todo)
+                            }
+                        }
+                        newButtonView
+                    } header: {
+                        headerView
                     }
-                    newButtonView
-                } header: {
-                    headerView
+                }
+            } detail: {
+                TodoView(todo: nil)
+            }
+
+        } else {
+            NavigationStack {
+                List {
+                    Section {
+                        ForEach($todos) { $todo in
+                            tapCardView(for: $todo)
+                        }
+                        newButtonView
+                    } header: {
+                        headerView
+                    }
+                }
+                .navigationTitle("Мои дела")
+                .overlay {
+                    plusButtonView
+                }
+                .sheet(item: $tappedTodo) { todo in
+                    TodoView(todo: tappedTodo)
                 }
             }
-            .navigationTitle("Мои дела")
-            .overlay {
-                plusButtonView
-            }
-            .sheet(item: $tappedTodo) { todo in
-                TodoView(todo: tappedTodo)
-            }
         }
+        
+        
     }
     
     func cardView(for todo: Binding<TodoItem>) -> some View {
