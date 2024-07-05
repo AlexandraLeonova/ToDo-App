@@ -10,6 +10,7 @@ struct TodoItem: Identifiable {
     let creationDate: Date
     let modifiedDate: Date?
     let color: Color
+    let category: Category
     
     init(
         id: String = UUID().uuidString,
@@ -19,7 +20,8 @@ struct TodoItem: Identifiable {
         isDone: Bool = false,
         creationDate: Date = .now,
         modifiedDate: Date? = nil,
-        color: Color = Color.default
+        color: Color = Color.default,
+        category: Category = Category.default
     ) {
         self.id = id
         self.text = text
@@ -29,6 +31,7 @@ struct TodoItem: Identifiable {
         self.creationDate = creationDate
         self.modifiedDate = modifiedDate
         self.color = color
+        self.category = category
     }
     
     func switchIsDone() -> TodoItem {
@@ -40,7 +43,8 @@ struct TodoItem: Identifiable {
             isDone: !isDone,
             creationDate: creationDate,
             modifiedDate: .now,
-            color: color
+            color: color,
+            category: category
         )
     }
     
@@ -63,11 +67,25 @@ struct TodoItem: Identifiable {
         case unimportant, ordinary, important
     }
     
-    struct Color: Equatable {
+    struct Color: Codable, Equatable, Hashable {
         let hex: String
         var opacity: Double
         
         static let `default` = Color(hex: "#FEFEFE", opacity: 1.0)
+    }
+    
+    struct Category: Codable, Hashable {
+        let name: String
+        let color: Color
+        
+        static let `default` = Category(name: "Личное", color: .init(hex: "#aec6cf", opacity: 1.0))
+        static let dafaultCategories = [
+            Category(name: "Личное", color: .init(hex: "#aec6cf", opacity: 1.0)),
+            Category(name: "Работа", color: Color.init(hex: "#f45353", opacity: 1.0)),
+            Category(name: "Учеба", color: Color.init(hex: "#3d85c6", opacity: 1.0)),
+            Category(name: "Хобби", color: Color.init(hex: "#8fce00", opacity: 1.0)),
+            Category(name: "Другое", color: Color.init(hex: "#ffffff", opacity: 1.0))
+        ]
     }
     
 }
@@ -81,7 +99,9 @@ extension TodoItem {
             "isDone": isDone,
             "creationDate": creationDate.ISO8601Format(),
             "colorHex": color.hex,
-            "colorOpacity": color.opacity
+            "colorOpacity": color.opacity,
+            "categoryName": category.name,
+            "categoryColor": category.color.hex
         ]
         
         if importance != .ordinary {
@@ -111,7 +131,9 @@ extension TodoItem {
               let creationDateString = jsonDict["creationDate"] as? String,
               let creationDate = formatter.date(from: creationDateString),
               let colorHex = jsonDict["colorHex"] as? String,
-              let colorOpacity = jsonDict["colorOpacity"] as? Double
+              let colorOpacity = jsonDict["colorOpacity"] as? Double,
+              let categoryName = jsonDict["categoryName"] as? String,
+              let categoryColor = jsonDict["categoryColor"] as? String
         else { return nil }
     
         let importance = (jsonDict["importance"] as? String).flatMap { Importance(rawValue: $0) } ?? .ordinary
@@ -126,7 +148,8 @@ extension TodoItem {
             isDone: isDone,
             creationDate: creationDate,
             modifiedDate: modifiedDate,
-            color: Color(hex: colorHex, opacity: colorOpacity)
+            color: Color(hex: colorHex, opacity: colorOpacity),
+            category: Category(name: categoryName, color: Color(hex: categoryColor, opacity: 1.0))
         )
     }
     

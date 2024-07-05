@@ -2,6 +2,9 @@ import SwiftUI
 
 struct TodoView: View {
     
+    let onSave: (() -> Void)?
+    let onDelete: (() -> Void)?
+    
     @Environment(\.dismiss) var dismiss
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -13,6 +16,7 @@ struct TodoView: View {
     @State private var deadline: Date
     @State private var importance: TodoItem.Importance
     @State private var color: TodoItem.Color
+    @State private var category: TodoItem.Category
 
     @FocusState private var isTextFieldFocused: Bool
     @State private var hasDeadline: Bool
@@ -30,13 +34,21 @@ struct TodoView: View {
         return formatter
     }
     
-    init(todo: TodoItem?) {
-        text = todo?.text ?? ""
-        deadline = (todo?.deadline ?? Calendar.current.date(byAdding: .day, value: 1, to: .now)) ?? .now
-        importance = todo?.importance ?? .ordinary
-        hasDeadline = todo?.deadline != nil
-        color = todo?.color ?? .default
+    init(
+        todo: TodoItem?,
+        onSave: (() -> Void)? = nil,
+        onDelete: (() -> Void)? = nil
+    ) {
+        
+        _text = State(initialValue: todo?.text ?? "")
+        _deadline = State(initialValue: (todo?.deadline ?? Calendar.current.date(byAdding: .day, value: 1, to: .now)) ?? .now)
+        _importance = State(initialValue: todo?.importance ?? .ordinary)
+        _hasDeadline = State(initialValue: todo?.deadline != nil)
+        _color = State(initialValue: todo?.color ?? .default)
+        _category = State(initialValue: todo?.category ?? .default)
         self.todo = todo
+        self.onSave = onSave
+        self.onDelete = onDelete
     }
     
     var body: some View {
@@ -128,6 +140,7 @@ struct TodoView: View {
         Section {
             importanceChoiceView
             colorChoiceView
+            CategoryPicker(selection: $category)
             deadlineChoiceView
         
             if hasDeadline && calendarOpened {
@@ -146,6 +159,7 @@ struct TodoView: View {
                     if let id = todo?.id {
                         store.deleteTodo(with: id)
                     }
+                    onDelete?()
                     dismiss()
                 }
                 .tint(Color("Color Red"))
@@ -262,7 +276,8 @@ struct TodoView: View {
                         isDone: todo.isDone,
                         creationDate: todo.creationDate,
                         modifiedDate: .now,
-                        color: color
+                        color: color,
+                        category: category
                     )
                 )
             } else {
@@ -271,11 +286,12 @@ struct TodoView: View {
                         text: text,
                         importance: importance,
                         deadline: hasDeadline ? deadline : nil,
-                        color: color
+                        color: color,
+                        category: category
                     )
                 )
             }
-            
+            onSave?()
             dismiss()
         }
         .disabled(text.isEmpty)

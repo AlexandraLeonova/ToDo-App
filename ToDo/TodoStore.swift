@@ -1,21 +1,19 @@
-//
-//  TodoStore.swift
-//  ToDo
-//
-//  Created by Sandra Leoni on 29.06.2024.
-//
-
 import SwiftUI
 
 class TodoStore: ObservableObject {
     
     @Published var todos: [TodoItem] = []
+    var categories: [TodoItem.Category] = []
+    
+    var todosByDeadline = [String?: [TodoItem]]()
     
     private let fileCache = FileCache()
     
     init() {
         fileCache.loadTasks()
         update(with: currentFilter, sort: currentSort)
+        fileCache.loadCategories()
+        categories = TodoItem.Category.dafaultCategories + fileCache.categories
     }
     
     func save(_ todo: TodoItem) {
@@ -23,6 +21,12 @@ class TodoStore: ObservableObject {
         fileCache.add(task: todo)
         update(with: currentFilter, sort: currentSort)
         fileCache.saveTasks()
+    }
+    
+    func save(_ category: TodoItem.Category) {
+        fileCache.add(category: category)
+        categories.append(category)
+        fileCache.saveCategories()
     }
     
     func deleteTodo(with id: String) {
@@ -42,12 +46,39 @@ class TodoStore: ObservableObject {
                 $0.modifiedDate ?? $0.creationDate > $1.modifiedDate ?? $1.creationDate
             }
         }
+        updateDict()
         switch filter {
         case .disable:
             break
         case .isDone:
             todos = todos.filter { !$0.isDone }
         }
+    }
+    
+    func formatted(date: Date?) -> String? {
+        guard let date else { return nil }
+        
+        let locale = Locale(identifier: "ru_RU")
+        
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.dateFormat = "d MMMM"
+        
+        return formatter.string(for: date)
+    }
+    
+    func updateDict() {
+        var dict = [String?: [TodoItem]]()
+        for todo in todos {
+            let key = formatted(date: todo.deadline)
+            
+            if let todos = dict[key] {
+                dict[key] = todos + [todo]
+            } else {
+                dict[key] = [todo]
+            }
+        }
+        todosByDeadline = dict
     }
     
     var doneCount: Int {
