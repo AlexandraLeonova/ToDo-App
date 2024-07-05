@@ -5,7 +5,6 @@ struct TodoListView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
 
-    
     @EnvironmentObject var store: TodoStore
     @Binding var todos: [TodoItem]
     @State private var tappedTodo: TodoItem?
@@ -47,6 +46,11 @@ struct TodoListView: View {
                     }
                 }
                 .navigationTitle("Мои дела")
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        calendarNavigationLink
+                    }
+                }
                 .overlay {
                     plusButtonView
                 }
@@ -55,7 +59,6 @@ struct TodoListView: View {
                 }
             }
         }
-        
         
     }
     
@@ -208,6 +211,30 @@ struct TodoListView: View {
         } label: {
             Label("Выполнено", systemImage: "checkmark.circle.fill")
                 .tint(.colorGreen)
+        }
+    }
+    
+    var calendarNavigationLink: some View {
+        NavigationLink {
+            CalendarViewControllerRepresentable(store: store)
+                .ignoresSafeArea()
+                .toolbarTitleDisplayMode(.inline)
+                .navigationTitle("Календарь дел")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        NavigationLink {
+                            CategoryCreationViewControllerRepresentable(store: store)
+                                .ignoresSafeArea()
+                                .toolbarTitleDisplayMode(.inline)
+                                .navigationTitle("Создание категории")
+                        } label: {
+                            Image(systemName: "wand.and.stars")
+                        }
+                    }
+                }
+        } label: {
+            Image(systemName: "calendar")
+                .tint(.colorRed)
         }
     }
 }

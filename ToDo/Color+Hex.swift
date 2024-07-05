@@ -1,11 +1,42 @@
-//
-//  Color+Hex.swift
-//  ToDo
-//
-//  Created by Sandra Leoni on 29.06.2024.
-//
-
 import SwiftUI
+
+extension String {
+    var uiColor: UIColor {
+        return UIColor(Color(hex: self))
+    }
+}
+
+extension UIColor {
+    var hex: String {
+        let values = self.cgColor.components
+        var outputR: Int = 0
+        var outputG: Int = 0
+        var outputB: Int = 0
+        
+        switch values!.count {
+        case 1:
+            outputR = Int(values![0] * 255)
+            outputG = Int(values![0] * 255)
+            outputB = Int(values![0] * 255)
+        case 2:
+            outputR = Int(values![0] * 255)
+            outputG = Int(values![0] * 255)
+            outputB = Int(values![0] * 255)
+        case 3:
+            outputR = Int(values![0] * 255)
+            outputG = Int(values![1] * 255)
+            outputB = Int(values![2] * 255)
+        case 4:
+            outputR = Int(values![0] * 255)
+            outputG = Int(values![1] * 255)
+            outputB = Int(values![2] * 255)
+        default:
+            break
+        }
+        return "#" + String(format:"%02X", outputR) + String(format:"%02X", outputG) + String(format:"%02X", outputB)
+    }
+}
+
 
 extension Color {
     init(hex: String) {
@@ -46,3 +77,4 @@ extension Color {
         return "#" + String(format:"%02X", outputR) + String(format:"%02X", outputG) + String(format:"%02X", outputB)
     }
 }
+

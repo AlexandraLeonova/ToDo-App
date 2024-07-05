@@ -6,15 +6,6 @@ struct TodoCardView: View {
     
     @Binding var todo: TodoItem
     
-    private let locale = Locale(identifier: "ru_RU")
-
-    private var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.locale = locale
-        formatter.dateFormat = "d MMMM"
-        return formatter
-    }
-    
     @State private var color = TodoItem.Color.default
     
     var body: some View {
@@ -93,7 +84,7 @@ struct TodoCardView: View {
     func deadlineView(for date: Date) -> some View {
         HStack {
             Image(systemName: "calendar")
-            Text(dateFormatter.string(from: date))
+            Text(store.formatted(date: date) ?? "")
         }
         .foregroundStyle(.colorGray)
     }
