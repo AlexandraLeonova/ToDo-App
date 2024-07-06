@@ -12,7 +12,7 @@ class CalendarCollectionViewCell: UICollectionViewCell {
     
     var title: String? {
         didSet {
-            dateLabel.text = title ?? "Другое"
+            dateLabel.text = title?.split(separator: " ").joined(separator: "\n") ?? "Другое"
         }
     }
     
