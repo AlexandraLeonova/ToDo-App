@@ -5,16 +5,20 @@ class CalendarViewController: UIViewController {
     
     let store: TodoStore
 
-    lazy var dates = Array(store.todosByDeadline.keys).sorted { lhs, rhs in
-        if lhs == nil {
-            return false
-        } else if rhs == nil {
-            return true
-        }
-        guard let left = store.todosByDeadline[lhs]?[0].deadline else { return false }
-        guard let right = store.todosByDeadline[rhs]?[0].deadline else { return true }
+    lazy var dates = sortedDates()
+    
+    func sortedDates() -> [String?] {
+        Array(store.todosByDeadline.keys).sorted { lhs, rhs in
+            if lhs == nil {
+                return false
+            } else if rhs == nil {
+                return true
+            }
+            guard let left = store.todosByDeadline[lhs]?[0].deadline else { return false }
+            guard let right = store.todosByDeadline[rhs]?[0].deadline else { return true }
 
-        return left < right
+            return left < right
+        }
     }
     
     var isScrolling = false
@@ -110,7 +114,9 @@ class CalendarViewController: UIViewController {
     
     @objc func addTask() {
         let todoView = TodoView(todo: nil, onSave: {
+            self.dates = self.sortedDates()
             self.tableView.reloadData()
+            self.collectionView.reloadData()
         }).environmentObject(store)
         
         present(UIHostingController(rootView: todoView), animated: true)
@@ -119,7 +125,7 @@ class CalendarViewController: UIViewController {
 
 extension CalendarViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return store.todosByDeadline.count
+        return dates.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -227,9 +233,13 @@ extension CalendarViewController: UITableViewDelegate {
         
         let todo = todo(for: indexPath)
         let todoView = TodoView(todo: todo) {
-            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            self.dates = self.sortedDates()
+            self.tableView.reloadData()
+            self.collectionView.reloadData()
         } onDelete: {
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            self.dates = self.sortedDates()
+            self.tableView.reloadData()
+            self.collectionView.reloadData()
         }.environmentObject(store)
         present(UIHostingController(rootView: todoView), animated: true)
     }
