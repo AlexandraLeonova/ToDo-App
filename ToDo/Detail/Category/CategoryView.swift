@@ -1,3 +1,4 @@
+import Extensions
 import SwiftUI
 
 struct CategoryView: View {

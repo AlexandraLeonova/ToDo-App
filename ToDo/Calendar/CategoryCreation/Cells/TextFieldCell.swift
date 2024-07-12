@@ -1,3 +1,4 @@
+import Extensions
 import UIKit
 
 class TextFieldCell: UITableViewCell {
