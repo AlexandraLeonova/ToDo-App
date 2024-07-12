@@ -46,6 +46,17 @@ class CalendarViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
 
+        // Временно для проверки
+        Task {
+            let urlRequest = URLRequest(url: URL(string: "https://apple.com")!)
+            do {
+                let (data, response) = try await URLSession.shared.dataTask(for: urlRequest)
+                print(data, response)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        
         view.backgroundColor = .backPrimary
     }
     
