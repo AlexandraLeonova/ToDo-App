@@ -1,12 +1,12 @@
 import SwiftUI
 
-extension String {
+public extension String {
     var uiColor: UIColor {
         return UIColor(Color(hex: self))
     }
 }
 
-extension UIColor {
+public extension UIColor {
     var hex: String {
         let values = self.cgColor.components
         var outputR: Int = 0
@@ -38,7 +38,7 @@ extension UIColor {
 }
 
 
-extension Color {
+public extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
         let rgbValue = UInt32(hex, radix: 16)
