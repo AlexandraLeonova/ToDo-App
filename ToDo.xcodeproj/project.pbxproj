@@ -33,6 +33,7 @@
 		8EB6F6C02C2F01000042BD92 /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB6F6BF2C2F01000042BD92 /* TodoListView.swift */; };
 		8EB6F6C22C2F05AB0042BD92 /* TodoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB6F6C12C2F05AB0042BD92 /* TodoCardView.swift */; };
 		8EB6F6C42C2F26080042BD92 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB6F6C32C2F26080042BD92 /* ColorPickerView.swift */; };
+		AE10B0AA159E316AC7C435F0 /* libPods-ToDo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66EDC233FDC92AD9B3BFCFE4 /* libPods-ToDo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		123DB5D983552B98DCD2D147 /* Pods-ToDo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDo.debug.xcconfig"; path = "Target Support Files/Pods-ToDo/Pods-ToDo.debug.xcconfig"; sourceTree = "<group>"; };
+		4A59C9F2898267B494CB959C /* Pods-ToDo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDo.release.xcconfig"; path = "Target Support Files/Pods-ToDo/Pods-ToDo.release.xcconfig"; sourceTree = "<group>"; };
 		5760AEF82C22CB29004120C4 /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5760AEFB2C22CB29004120C4 /* ToDoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoApp.swift; sourceTree = "<group>"; };
 		5760AEFD2C22CB29004120C4 /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
@@ -63,6 +66,7 @@
 		5760AF162C22CB30004120C4 /* ToDoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoUITests.swift; sourceTree = "<group>"; };
 		5760AF182C22CB30004120C4 /* ToDoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5760AF252C22CB5F004120C4 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
+		66EDC233FDC92AD9B3BFCFE4 /* libPods-ToDo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ToDo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E2A585D2C25B584000FBE58 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
 		8E466D8E2C36AC38002C13C7 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		8E466D902C36AE98002C13C7 /* ViewControllerRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerRepresentable.swift; sourceTree = "<group>"; };
@@ -89,6 +93,7 @@
 			files = (
 				8EA3EA702C41A2930042A3B4 /* CocoaLumberjackSwift in Frameworks */,
 				8EA3EA6E2C41A2930042A3B4 /* CocoaLumberjack in Frameworks */,
+				AE10B0AA159E316AC7C435F0 /* libPods-ToDo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +114,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3AFB4F20F1ED6BE1F0FA2F57 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				123DB5D983552B98DCD2D147 /* Pods-ToDo.debug.xcconfig */,
+				4A59C9F2898267B494CB959C /* Pods-ToDo.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		5760AEEF2C22CB28004120C4 = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +130,8 @@
 				5760AF0B2C22CB30004120C4 /* ToDoTests */,
 				5760AF152C22CB30004120C4 /* ToDoUITests */,
 				5760AEF92C22CB29004120C4 /* Products */,
+				3AFB4F20F1ED6BE1F0FA2F57 /* Pods */,
+				88927EDF83C88045C415CE98 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -168,6 +184,14 @@
 				5760AF182C22CB30004120C4 /* ToDoUITestsLaunchTests.swift */,
 			);
 			path = ToDoUITests;
+			sourceTree = "<group>";
+		};
+		88927EDF83C88045C415CE98 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				66EDC233FDC92AD9B3BFCFE4 /* libPods-ToDo.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		8E466D8D2C36AB72002C13C7 /* Calendar */ = {
@@ -253,7 +277,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5760AF1C2C22CB30004120C4 /* Build configuration list for PBXNativeTarget "ToDo" */;
 			buildPhases = (
+				66207ABEBDD8C5EBDC69B6DE /* [CP] Check Pods Manifest.lock */,
 				5760AEF42C22CB29004120C4 /* Sources */,
+				8EA3EA712C41A8590042A3B4 /* Run Script */,
 				5760AEF52C22CB29004120C4 /* Frameworks */,
 				5760AEF62C22CB29004120C4 /* Resources */,
 			);
@@ -377,6 +403,50 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		66207ABEBDD8C5EBDC69B6DE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ToDo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8EA3EA712C41A8590042A3B4 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if command -v ${PODS_ROOT}/SwiftLint/swiftlint >/dev/null 2>&1\nthen\n    ${PODS_ROOT}/SwiftLint/swiftlint\nelse\n    echo \"warning: `swiftlint` command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5760AEF42C22CB29004120C4 /* Sources */ = {
@@ -559,6 +629,7 @@
 		};
 		5760AF1D2C22CB30004120C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 123DB5D983552B98DCD2D147 /* Pods-ToDo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -567,6 +638,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ToDo/Preview Content\"";
 				DEVELOPMENT_TEAM = 2W7NJYWQ8U;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -588,6 +660,7 @@
 		};
 		5760AF1E2C22CB30004120C4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4A59C9F2898267B494CB959C /* Pods-ToDo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -596,6 +669,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ToDo/Preview Content\"";
 				DEVELOPMENT_TEAM = 2W7NJYWQ8U;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
