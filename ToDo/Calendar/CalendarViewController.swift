@@ -180,7 +180,7 @@ extension CalendarViewController: UITableViewDataSource {
     
     func changeIsDone(at indexPath: IndexPath) {
         store.save(todo(for: indexPath).switchIsDone())
-        tableView.reloadRows(at: [indexPath], with: .automatic)
+        tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

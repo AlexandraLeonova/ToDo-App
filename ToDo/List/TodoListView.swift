@@ -47,15 +47,26 @@ struct TodoListView: View {
                 }
                 .navigationTitle("Мои дела")
                 .toolbar {
+                    if store.isLoading {
+                        ToolbarItem(placement: .topBarLeading) {
+                            ProgressView()
+                        }
+                    }
+                   
                     ToolbarItem(placement: .topBarTrailing) {
                         calendarNavigationLink
                     }
                 }
                 .overlay {
-                    plusButtonView
+                    plusButtonView.disabled(store.isLoading)
                 }
                 .sheet(item: $tappedTodo) { todo in
                     TodoView(todo: tappedTodo)
+                }
+                .refreshable {
+                    withAnimation {
+                        store.fetchTodoItems()
+                    }
                 }
             }
         }
@@ -106,7 +117,7 @@ struct TodoListView: View {
         } label: {
             Image(systemName: "plus.circle.fill")
                 .resizable()
-                .foregroundStyle(.colorBlue)
+                .foregroundStyle(store.isLoading ? .colorGray : .colorBlue)
                 .frame(width: 44, height: 44)
                 .background(.colorWhite)
                 .clipShape(.circle)
@@ -132,7 +143,7 @@ struct TodoListView: View {
                 }
             }
         } else {
-            Button() {
+            Button {
                 withAnimation {
                     store.update(with: store.currentFilter, sort: .importance)
                 }
@@ -160,7 +171,7 @@ struct TodoListView: View {
                 }
             }
         } else {
-            Button() {
+            Button {
                 withAnimation {
                     store.update(with: .disable, sort: store.currentSort)
                 }

@@ -80,11 +80,11 @@ struct TodoItem: Identifiable {
         
         static let `default` = Category(name: "Личное", color: .init(hex: "#aec6cf", opacity: 1.0))
         static let dafaultCategories = [
-            Category(name: "Личное", color: .init(hex: "#aec6cf", opacity: 1.0)),
-            Category(name: "Работа", color: Color.init(hex: "#f45353", opacity: 1.0)),
-            Category(name: "Учеба", color: Color.init(hex: "#3d85c6", opacity: 1.0)),
-            Category(name: "Хобби", color: Color.init(hex: "#8fce00", opacity: 1.0)),
-            Category(name: "Другое", color: Color.init(hex: "#ffffff", opacity: 1.0))
+            Category(name: "Личное", color: Color(hex: "#aec6cf", opacity: 1.0)),
+            Category(name: "Работа", color: Color(hex: "#f45353", opacity: 1.0)),
+            Category(name: "Учеба", color: Color(hex: "#3d85c6", opacity: 1.0)),
+            Category(name: "Хобби", color: Color(hex: "#8fce00", opacity: 1.0)),
+            Category(name: "Другое", color: Color(hex: "#ffffff", opacity: 1.0))
         ]
     }
     
