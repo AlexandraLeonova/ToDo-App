@@ -21,6 +21,8 @@
 		8E466D992C37DA1C002C13C7 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E466D982C37DA1C002C13C7 /* CategoryView.swift */; };
 		8E466D9C2C37DAAF002C13C7 /* CategoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E466D9B2C37DAAF002C13C7 /* CategoryPicker.swift */; };
 		8E8B416F2C41CB1B005BD835 /* Extensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8E8B416E2C41CB1B005BD835 /* Extensions */; };
+		8E8B41762C47AAA1005BD835 /* NetworkingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8B41752C47AAA1005BD835 /* NetworkingService.swift */; };
+		8E8B41782C47AAC7005BD835 /* DefaultNetworkingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8B41772C47AAC7005BD835 /* DefaultNetworkingService.swift */; };
 		8EA3EA242C386FEB0042A3B4 /* CategoryCreationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA3EA232C386FEB0042A3B4 /* CategoryCreationTableViewController.swift */; };
 		8EA3EA292C38714D0042A3B4 /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA3EA282C38714D0042A3B4 /* ColorPickerCell.swift */; };
 		8EA3EA2B2C387B0B0042A3B4 /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EA3EA2A2C387B0B0042A3B4 /* TextFieldCell.swift */; };
@@ -32,6 +34,7 @@
 		8EB6F6C02C2F01000042BD92 /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB6F6BF2C2F01000042BD92 /* TodoListView.swift */; };
 		8EB6F6C22C2F05AB0042BD92 /* TodoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB6F6C12C2F05AB0042BD92 /* TodoCardView.swift */; };
 		8EB6F6C42C2F26080042BD92 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EB6F6C32C2F26080042BD92 /* ColorPickerView.swift */; };
+		8ED6BFB82C48246D00421109 /* NetworkTodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED6BFB72C48246D00421109 /* NetworkTodoItem.swift */; };
 		AE10B0AA159E316AC7C435F0 /* libPods-ToDo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 66EDC233FDC92AD9B3BFCFE4 /* libPods-ToDo.a */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +75,9 @@
 		8E466D922C36C4EC002C13C7 /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		8E466D982C37DA1C002C13C7 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		8E466D9B2C37DAAF002C13C7 /* CategoryPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPicker.swift; sourceTree = "<group>"; };
+		8E8B41752C47AAA1005BD835 /* NetworkingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingService.swift; sourceTree = "<group>"; };
+		8E8B41772C47AAC7005BD835 /* DefaultNetworkingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNetworkingService.swift; sourceTree = "<group>"; };
+		8E8B41792C480047005BD835 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8EA3EA232C386FEB0042A3B4 /* CategoryCreationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCreationTableViewController.swift; sourceTree = "<group>"; };
 		8EA3EA282C38714D0042A3B4 /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
 		8EA3EA2A2C387B0B0042A3B4 /* TextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
@@ -81,6 +87,7 @@
 		8EB6F6BF2C2F01000042BD92 /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
 		8EB6F6C12C2F05AB0042BD92 /* TodoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCardView.swift; sourceTree = "<group>"; };
 		8EB6F6C32C2F26080042BD92 /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
+		8ED6BFB72C48246D00421109 /* NetworkTodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTodoItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +153,8 @@
 		5760AEFA2C22CB29004120C4 /* ToDo */ = {
 			isa = PBXGroup;
 			children = (
+				8E8B41792C480047005BD835 /* Info.plist */,
+				8E8B41742C47AA72005BD835 /* Networking */,
 				8E466D8D2C36AB72002C13C7 /* Calendar */,
 				5760AEFB2C22CB29004120C4 /* ToDoApp.swift */,
 				8EB4C7012C2F850A0017F72B /* TodoStore.swift */,
@@ -209,6 +218,16 @@
 				8E466D9B2C37DAAF002C13C7 /* CategoryPicker.swift */,
 			);
 			path = Category;
+			sourceTree = "<group>";
+		};
+		8E8B41742C47AA72005BD835 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				8E8B41752C47AAA1005BD835 /* NetworkingService.swift */,
+				8ED6BFB72C48246D00421109 /* NetworkTodoItem.swift */,
+				8E8B41772C47AAC7005BD835 /* DefaultNetworkingService.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 		8EA3EA222C386F620042A3B4 /* CategoryCreation */ = {
@@ -452,8 +471,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5760AEFE2C22CB29004120C4 /* TodoView.swift in Sources */,
+				8E8B41782C47AAC7005BD835 /* DefaultNetworkingService.swift in Sources */,
 				8EB4C7022C2F850A0017F72B /* TodoStore.swift in Sources */,
 				8E466D9C2C37DAAF002C13C7 /* CategoryPicker.swift in Sources */,
+				8E8B41762C47AAA1005BD835 /* NetworkingService.swift in Sources */,
 				8E466D932C36C4EC002C13C7 /* CalendarCollectionViewCell.swift in Sources */,
 				5760AF262C22CB5F004120C4 /* TodoItem.swift in Sources */,
 				8E466D8F2C36AC38002C13C7 /* CalendarViewController.swift in Sources */,
@@ -468,6 +489,7 @@
 				8EB4C6F92C2F4F5A0017F72B /* ColorPickerSheet.swift in Sources */,
 				8E466D992C37DA1C002C13C7 /* CategoryView.swift in Sources */,
 				8EA3EA2B2C387B0B0042A3B4 /* TextFieldCell.swift in Sources */,
+				8ED6BFB82C48246D00421109 /* NetworkTodoItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,6 +658,8 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ToDo/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -667,6 +691,8 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ToDo/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

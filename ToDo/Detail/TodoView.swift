@@ -209,7 +209,7 @@ struct TodoView: View {
             
             Spacer()
             
-            if color != .default  {
+            if color != .default {
                 Button {} label: {
                     Text("Сбросить")
                 }

@@ -3,24 +3,111 @@ import SwiftUI
 class TodoStore: ObservableObject {
     
     @Published var todos: [TodoItem] = []
+    @Published var isLoading = false
     var categories: [TodoItem.Category] = []
+    private var isDirty: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: "isDirty")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "isDirty")
+        }
+    }
     
     var todosByDeadline = [String?: [TodoItem]]()
     
     private let fileCache = FileCache()
     
+    private let networkingService: NetworkingService = DefaultNetworkingService()
+    
     init() {
-        fileCache.loadTasks()
-        update(with: currentFilter, sort: currentSort)
+        if isDirty {
+            fileCache.loadTasks()
+            update(with: currentFilter, sort: currentSort)
+            updateTodoItems()
+        } else {
+            fetchTodoItems()
+        }
+        
         fileCache.loadCategories()
         categories = TodoItem.Category.dafaultCategories + fileCache.categories
     }
     
+    func updateTodoItems() {
+        isLoading = true
+        networkingService.updateTodoItems(items: fileCache.tasks) { result in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                switch result {
+                case .success:
+                    print("update ok")
+                    self.isDirty = false
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func fetchTodoItems() {
+        isLoading = true
+        networkingService.fetchTodoItems { result in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                switch result {
+                case .success(let todos):
+                    self.fileCache.tasks.forEach { self.fileCache.deleteTask(id: $0.id) }
+                    todos.forEach { self.fileCache.add(task: $0) }
+                    self.fileCache.saveTasks()
+                    self.update(with: self.currentFilter, sort: self.currentSort)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
     func save(_ todo: TodoItem) {
+        let isNew = !fileCache.tasks.contains { $0.id == todo.id}
+        
         fileCache.deleteTask(id: todo.id)
         fileCache.add(task: todo)
         update(with: currentFilter, sort: currentSort)
         fileCache.saveTasks()
+        
+        guard !isDirty else {
+            updateTodoItems()
+            return
+        }
+        
+        isLoading = true
+        if isNew {
+            networkingService.addTodoItem(item: todo) { result in
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    switch result {
+                    case .success:
+                        print("add ok")
+                    case .failure(let error):
+                        print(error)
+                        self.isDirty = true
+                    }
+                }
+            }
+        } else {
+            networkingService.editTodoItem(item: todo) { result in
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    switch result {
+                    case .success:
+                        print("edit ok")
+                    case .failure(let error):
+                        print(error)
+                        self.isDirty = true
+                    }
+                }
+            }
+        }
     }
     
     func save(_ category: TodoItem.Category) {
@@ -33,6 +120,25 @@ class TodoStore: ObservableObject {
         fileCache.deleteTask(id: id)
         update(with: currentFilter, sort: currentSort)
         fileCache.saveTasks()
+        
+        guard !isDirty else {
+            updateTodoItems()
+            return
+        }
+        
+        isLoading = true
+        networkingService.deleteTodoItem(id: id) { result in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                switch result {
+                case .success:
+                    print("delete ok")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    self.isDirty = true
+                }
+            }
+        }
     }
     
     func update(with filter: Filter, sort: Sort) {
