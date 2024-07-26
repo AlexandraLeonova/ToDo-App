@@ -1,11 +1,13 @@
 import CocoaLumberjackSwift
 import Foundation
+import SwiftData
 
 private let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-private let tasksURL = documentDirectory.appending(path: "tasks").appendingPathExtension("json")
 private let categoriesURL = documentDirectory.appending(path: "categories").appendingPathExtension("json")
 
 class FileCache {
+    
+    let context = ModelContext(try! ModelContainer(for: TodoItem.self))
     
     init() {
         DDLog.add(DDOSLogger.sharedInstance)
@@ -18,38 +20,35 @@ class FileCache {
     private(set) var tasks = [TodoItem]()
     private(set) var categories = [TodoItem.Category]()
     
-    func add(task: TodoItem) {
-        if tasks.contains(where: { $0.id == task.id }) {
+    func insert(_ todoItem: TodoItem) {
+        if tasks.contains(where: { $0.id == todoItem.id }) {
             print("this task already exists!")
             return
         }
-        tasks.append(task)
+        
+        context.insert(todoItem)
+        tasks.append(todoItem)
     }
     
-    func deleteTask(id: String) {
-        tasks.removeAll { $0.id == id }
-    }
-    
-    func saveTasks(to fileURL: URL = tasksURL) {
+    func fetch() {
+        let descriptor = FetchDescriptor<TodoItem>(sortBy: [])
         do {
-            let data = try JSONSerialization.data(withJSONObject: tasks.map { $0.json })
-            try data.write(to: fileURL, options: .noFileProtection)
-            DDLogInfo("saved tasks at \(fileURL)")
+            tasks = try context.fetch(descriptor)
+            DDLogInfo("fetched tasks")
         } catch {
             DDLogError(error.localizedDescription)
         }
     }
     
-    func loadTasks(from fileURL: URL = tasksURL) {
-        do {
-            let data = try Data(contentsOf: fileURL)
-            if let json = try JSONSerialization.jsonObject(with: data) as? [Any] {
-                tasks = json.compactMap { TodoItem.parse(json: $0) }
-                DDLogInfo("loaded tasks from \(fileURL)")
-            }
-        } catch {
-            DDLogError(error.localizedDescription)
-        }
+    func delete(_ todoItem: TodoItem) {
+        tasks.removeAll { $0.id == todoItem.id }
+        context.delete(todoItem)
+    }
+    
+    func update(_ todoItem: TodoItem) {
+        context.insert(todoItem)
+        tasks.removeAll { $0.id == todoItem.id }
+        tasks.append(todoItem)
     }
     
     func add(category: TodoItem.Category) {

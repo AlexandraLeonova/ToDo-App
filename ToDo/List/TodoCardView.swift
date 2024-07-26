@@ -40,7 +40,7 @@ struct TodoCardView: View {
         
         let onTap = {
             withAnimation {
-                todo = todo.switchIsDone()
+                todo.isDone.toggle()
                 store.save(todo)
             }
         }

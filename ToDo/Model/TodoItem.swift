@@ -1,16 +1,18 @@
 import Foundation
+import SwiftData
 
-struct TodoItem: Identifiable {
+@Model
+class TodoItem: Identifiable {
     
-    let id: String
-    let text: String
-    let importance: Importance
-    let deadline: Date?
-    let isDone: Bool
-    let creationDate: Date
-    let modifiedDate: Date?
-    let color: Color
-    let category: Category
+    @Attribute(.unique) var id: String
+    var text: String
+    var importance: Importance
+    var deadline: Date?
+    var isDone: Bool
+    var creationDate: Date
+    var modifiedDate: Date?
+    var color: Color
+    var category: Category
     
     init(
         id: String = UUID().uuidString,
@@ -34,21 +36,7 @@ struct TodoItem: Identifiable {
         self.category = category
     }
     
-    func switchIsDone() -> TodoItem {
-        TodoItem(
-            id: id,
-            text: text,
-            importance: importance,
-            deadline: deadline,
-            isDone: !isDone,
-            creationDate: creationDate,
-            modifiedDate: .now,
-            color: color,
-            category: category
-        )
-    }
-    
-    enum Importance: String, CaseIterable, Identifiable {
+    enum Importance: String, CaseIterable, Identifiable, Codable {
         var value: Int {
             switch self {
             case .unimportant:
@@ -86,121 +74,5 @@ struct TodoItem: Identifiable {
             Category(name: "Хобби", color: Color(hex: "#8fce00", opacity: 1.0)),
             Category(name: "Другое", color: Color(hex: "#ffffff", opacity: 1.0))
         ]
-    }
-    
-}
-extension TodoItem {
-    
-    var json: Any {
-        
-        var object: [String: Any] = [
-            "id": id,
-            "text": text,
-            "isDone": isDone,
-            "creationDate": creationDate.ISO8601Format(),
-            "colorHex": color.hex,
-            "colorOpacity": color.opacity,
-            "categoryName": category.name,
-            "categoryColor": category.color.hex
-        ]
-        
-        if importance != .ordinary {
-            object["importance"] = importance.rawValue
-        }
-    
-        if let deadline {
-            object["deadline"] = deadline.ISO8601Format()
-        }
-        
-        if let modifiedDate {
-            object["modifiedDate"] = modifiedDate.ISO8601Format()
-        }
-        
-        return object
-    }
-    
-    static func parse(json: Any) -> TodoItem? {
-        
-        guard let jsonDict = json as? [String: Any] else { return nil }
-        
-        let formatter = ISO8601DateFormatter()
-        
-        guard let id = jsonDict["id"] as? String,
-              let text = jsonDict["text"] as? String,
-              let isDone = jsonDict["isDone"] as? Bool,
-              let creationDateString = jsonDict["creationDate"] as? String,
-              let creationDate = formatter.date(from: creationDateString),
-              let colorHex = jsonDict["colorHex"] as? String,
-              let colorOpacity = jsonDict["colorOpacity"] as? Double,
-              let categoryName = jsonDict["categoryName"] as? String,
-              let categoryColor = jsonDict["categoryColor"] as? String
-        else { return nil }
-    
-        let importance = (jsonDict["importance"] as? String).flatMap { Importance(rawValue: $0) } ?? .ordinary
-        let deadline = (jsonDict["deadline"] as? String).flatMap { formatter.date(from: $0) }
-        let modifiedDate = (jsonDict["modifiedDate"] as? String).flatMap { formatter.date(from: $0) }
-        
-        return TodoItem(
-            id: id,
-            text: text,
-            importance: importance,
-            deadline: deadline,
-            isDone: isDone,
-            creationDate: creationDate,
-            modifiedDate: modifiedDate,
-            color: Color(hex: colorHex, opacity: colorOpacity),
-            category: Category(name: categoryName, color: Color(hex: categoryColor, opacity: 1.0))
-        )
-    }
-    
-    static func parse(csv: String) -> [TodoItem] {
-        
-        var rows = csv.components(separatedBy: "\n")
-                
-        guard let keys = rows.first?.components(separatedBy: ","),
-              let idIndex = keys.firstIndex(of: "id"),
-              let textIndex = keys.firstIndex(of: "text"),
-              let isDoneIndex = keys.firstIndex(of: "isDone"),
-              let creationDateIndex = keys.firstIndex(of: "creationDate")
-        else { return [] }
-        
-        let importanceIndex = keys.firstIndex(of: "importance")
-        let deadlineIndex = keys.firstIndex(of: "deadline")
-        let modifiedDateIndex = keys.firstIndex(of: "modifiedDate")
-        
-        rows.removeFirst()
-        return rows.compactMap { row in
-            let values = row.components(separatedBy: ",")
-            
-            let isDone: Bool
-            if values[isDoneIndex] == "true" {
-                isDone = true
-            } else if values[isDoneIndex] == "false" {
-                isDone = false
-            } else {
-                return nil
-            }
-            
-            let formatter = ISO8601DateFormatter()
-            guard let creationDate = formatter.date(from: values[creationDateIndex]) else {
-                return nil
-            }
-            
-            let importance = importanceIndex.flatMap { values[$0] }.flatMap { Importance(rawValue: $0) } ?? .ordinary
-            
-            let deadline = deadlineIndex.flatMap { values[$0] }.flatMap { formatter.date(from: $0) }
-            
-            let modifiedDate = modifiedDateIndex.flatMap { values[$0] }.flatMap { formatter.date(from: $0) }
-            
-            return TodoItem(
-                id: values[idIndex],
-                text: values[textIndex],
-                importance: importance,
-                deadline: deadline,
-                isDone: isDone,
-                creationDate: creationDate,
-                modifiedDate: modifiedDate
-            )
-        }
     }
 }

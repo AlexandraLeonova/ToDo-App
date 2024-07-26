@@ -156,8 +156,8 @@ struct TodoView: View {
             HStack {
                 Spacer()
                 Button("Удалить") {
-                    if let id = todo?.id {
-                        store.deleteTodo(with: id)
+                    if let todo {
+                        store.delete(todo)
                     }
                     onDelete?()
                     dismiss()
@@ -267,19 +267,13 @@ struct TodoView: View {
     var doneButtonView: some View {
         Button("Cохранить") {
             if let todo {
-                store.save(
-                    TodoItem(
-                        id: todo.id,
-                        text: text,
-                        importance: importance,
-                        deadline: hasDeadline ? deadline : nil,
-                        isDone: todo.isDone,
-                        creationDate: todo.creationDate,
-                        modifiedDate: .now,
-                        color: color,
-                        category: category
-                    )
-                )
+                todo.text = text
+                todo.importance = importance
+                todo.deadline =  hasDeadline ? deadline : nil
+                todo.modifiedDate = .now
+                todo.color = color
+                todo.category = category
+                store.save(todo)
             } else {
                 store.save(
                     TodoItem(

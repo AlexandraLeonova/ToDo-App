@@ -198,7 +198,7 @@ struct TodoListView: View {
     func deleteSwipeButtonView(for todo: TodoItem) -> some View {
         Button {
             withAnimation {
-                store.deleteTodo(with: todo.id)
+                store.delete(todo)
             }
         } label: {
             Label("Удалить", systemImage: "trash.fill")
@@ -217,7 +217,8 @@ struct TodoListView: View {
     func doneSwipeButtonView(for todo: TodoItem) -> some View {
         Button {
             withAnimation {
-                store.save(todo.switchIsDone())
+                todo.isDone.toggle()
+                store.save(todo)
             }
         } label: {
             Label("Выполнено", systemImage: "checkmark.circle.fill")
