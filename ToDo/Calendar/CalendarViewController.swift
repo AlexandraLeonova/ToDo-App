@@ -179,7 +179,9 @@ extension CalendarViewController: UITableViewDataSource {
     }
     
     func changeIsDone(at indexPath: IndexPath) {
-        store.save(todo(for: indexPath).switchIsDone())
+        let todo = todo(for: indexPath)
+        todo.isDone.toggle()
+        store.save(todo)
         tableView.reloadData()
     }
     

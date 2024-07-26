@@ -101,7 +101,15 @@ class DefaultNetworkingService: NetworkingService {
                     return completion(.failure(NetworkError.badResponse))
                 }
                 
-                completion(.success(()))
+                if let data {
+                    do {
+                        let responseBody = try self.decoder.decode(ListResponseBody.self, from: data)
+                        self.revision = responseBody.revision
+                        completion(.success(()))
+                    } catch {
+                        completion(.failure(error))
+                    }
+                }
             }.resume()
         }
     }

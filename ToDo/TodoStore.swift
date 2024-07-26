@@ -5,14 +5,7 @@ class TodoStore: ObservableObject {
     @Published var todos: [TodoItem] = []
     @Published var isLoading = false
     var categories: [TodoItem.Category] = []
-    private var isDirty: Bool {
-        get {
-            UserDefaults.standard.bool(forKey: "isDirty")
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: "isDirty")
-        }
-    }
+    private var isDirty = true
     
     var todosByDeadline = [String?: [TodoItem]]()
     
@@ -22,7 +15,7 @@ class TodoStore: ObservableObject {
     
     init() {
         if isDirty {
-            fileCache.loadTasks()
+            fileCache.fetch()
             update(with: currentFilter, sort: currentSort)
             updateTodoItems()
         } else {
@@ -56,9 +49,8 @@ class TodoStore: ObservableObject {
                 self.isLoading = false
                 switch result {
                 case .success(let todos):
-                    self.fileCache.tasks.forEach { self.fileCache.deleteTask(id: $0.id) }
-                    todos.forEach { self.fileCache.add(task: $0) }
-                    self.fileCache.saveTasks()
+                    self.fileCache.tasks.forEach { self.fileCache.delete($0) }
+                    todos.forEach { self.fileCache.insert($0) }
                     self.update(with: self.currentFilter, sort: self.currentSort)
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -68,33 +60,7 @@ class TodoStore: ObservableObject {
     }
     
     func save(_ todo: TodoItem) {
-        let isNew = !fileCache.tasks.contains { $0.id == todo.id}
-        
-        fileCache.deleteTask(id: todo.id)
-        fileCache.add(task: todo)
-        update(with: currentFilter, sort: currentSort)
-        fileCache.saveTasks()
-        
-        guard !isDirty else {
-            updateTodoItems()
-            return
-        }
-        
-        isLoading = true
-        if isNew {
-            networkingService.addTodoItem(item: todo) { result in
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                    switch result {
-                    case .success:
-                        print("add ok")
-                    case .failure(let error):
-                        print(error)
-                        self.isDirty = true
-                    }
-                }
-            }
-        } else {
+        if fileCache.tasks.contains(where: { $0.id == todo.id }) {
             networkingService.editTodoItem(item: todo) { result in
                 DispatchQueue.main.async {
                     self.isLoading = false
@@ -107,6 +73,30 @@ class TodoStore: ObservableObject {
                     }
                 }
             }
+            update(with: currentFilter, sort: currentSort)
+            return
+        }
+        
+        fileCache.insert(todo)
+        update(with: currentFilter, sort: currentSort)
+        
+        guard !isDirty else {
+            updateTodoItems()
+            return
+        }
+        
+        isLoading = true
+        networkingService.addTodoItem(item: todo) { result in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                switch result {
+                case .success:
+                    print("add ok")
+                case .failure(let error):
+                    print(error)
+                    self.isDirty = true
+                }
+            }
         }
     }
     
@@ -116,10 +106,9 @@ class TodoStore: ObservableObject {
         fileCache.saveCategories()
     }
     
-    func deleteTodo(with id: String) {
-        fileCache.deleteTask(id: id)
+    func delete(_ todo: TodoItem) {
+        fileCache.delete(todo)
         update(with: currentFilter, sort: currentSort)
-        fileCache.saveTasks()
         
         guard !isDirty else {
             updateTodoItems()
@@ -127,7 +116,7 @@ class TodoStore: ObservableObject {
         }
         
         isLoading = true
-        networkingService.deleteTodoItem(id: id) { result in
+        networkingService.deleteTodoItem(id: todo.id) { result in
             DispatchQueue.main.async {
                 self.isLoading = false
                 switch result {
